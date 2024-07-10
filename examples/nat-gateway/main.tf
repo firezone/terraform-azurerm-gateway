@@ -5,8 +5,8 @@ locals {
   firezone_token = "YOUR_FIREZONE_TOKEN"
 }
 
-module "azure_firezone_gateway" {
-  source = "terraform-firezone-azure"
+module "gateway" {
+  source = "firezone/gateway/azurerm"
 
   ###################
   # Required inputs #
