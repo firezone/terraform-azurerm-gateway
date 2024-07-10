@@ -6,7 +6,7 @@ locals {
 }
 
 module "azure_firezone_gateway" {
-  source = "github.com/firezone/terraform-firezone-azure"
+  source = "terraform-firezone-azure"
 
   ###################
   # Required inputs #
