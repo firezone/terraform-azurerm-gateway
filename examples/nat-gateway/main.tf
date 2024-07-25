@@ -40,7 +40,7 @@ module "gateway" {
   # desired_capacity    = 3
 
   # The admin username for the admin_ssh_key above. Defaults to "firezone".
-  # admin_ssh_username = "firezone"
+  # admin_username = "firezone"
 
   # Pick an image to use. Defaults to Ubuntu 22.04 LTS.
   # source_image_reference {
