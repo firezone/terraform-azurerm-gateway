@@ -36,6 +36,12 @@ module "gateway" {
   # Optional inputs #
   ###################
 
+  # We recommend a minimum of 3 instances for high availability.
+  # desired_capacity    = 3
+
+  # The admin username for the admin_ssh_key above. Defaults to "firezone".
+  # admin_ssh_username = "firezone"
+
   # Pick an image to use. Defaults to Ubuntu 22.04 LTS.
   # source_image_reference {
   #   publisher = "Canonical"
@@ -55,9 +61,6 @@ module "gateway" {
   # horizontally.
   # See https://www.firezone.dev/kb/deploy/gateways#sizing-recommendations.
   # instance_type       = "Standard_B1ls"
-
-  # We recommend a minimum of 3 instances for high availability.
-  # desired_capacity    = 3
 }
 
 # Configure the Azure provider
