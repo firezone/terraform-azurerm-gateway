@@ -61,6 +61,11 @@ module "gateway" {
   # horizontally.
   # See https://www.firezone.dev/kb/deploy/gateways#sizing-recommendations.
   # instance_type       = "Standard_B1ls"
+
+  depends_on {
+    # Ensure the NAT Gateway is created before the Gateways.
+    azurerm_nat_gateway_public_ip_association.firezone
+  }
 }
 
 # Configure the Azure provider
