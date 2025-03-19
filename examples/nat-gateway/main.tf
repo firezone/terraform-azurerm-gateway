@@ -29,9 +29,6 @@ module "gateway" {
   # Attach the Gateways to your NSG.
   network_security_group_id = azurerm_network_security_group.firezone.id
 
-  # Attach the NAT Gateway
-  nat_gateway_id = azurerm_nat_gateway.firezone.id
-
   ###################
   # Optional inputs #
   ###################
@@ -62,10 +59,10 @@ module "gateway" {
   # See https://www.firezone.dev/kb/deploy/gateways#sizing-recommendations.
   # instance_type       = "Standard_B1ls"
 
-  depends_on {
+  depends_on = [
     # Ensure the NAT Gateway is created before the Gateways.
     azurerm_nat_gateway_public_ip_association.firezone
-  }
+  ]
 }
 
 # Configure the Azure provider

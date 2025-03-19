@@ -93,8 +93,3 @@ variable "platform_fault_domain_count" {
   type        = number
   default     = 3
 }
-
-variable "nat_gateway_id" {
-  description = "The NAT gateway ID"
-  type        = string
-}
