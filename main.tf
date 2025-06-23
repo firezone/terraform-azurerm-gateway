@@ -44,12 +44,12 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     set -e
 
     sudo apt-get update
-    sudo apt-get install -y curl uuid-runtime
+    sudo apt-get install -y curl
 
     FIREZONE_TOKEN="${var.firezone_token}" \
     FIREZONE_VERSION="${var.firezone_version}" \
     FIREZONE_NAME="${var.firezone_name}" \
-    FIREZONE_ID="$(uuidgen)" \
+    FIREZONE_ID="$(head -c /dev/urandom | sha256)" \
     FIREZONE_API_URL="${var.firezone_api_url}" \
     bash <(curl -fsSL https://raw.githubusercontent.com/firezone/firezone/main/scripts/gateway-systemd-install.sh)
 
