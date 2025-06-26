@@ -49,7 +49,7 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     FIREZONE_TOKEN="${var.firezone_token}" \
     FIREZONE_VERSION="${var.firezone_version}" \
     FIREZONE_NAME="${var.firezone_name}" \
-    FIREZONE_ID="$(head -c /dev/urandom | sha256)" \
+    FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)" \
     FIREZONE_API_URL="${var.firezone_api_url}" \
     bash <(curl -fsSL https://raw.githubusercontent.com/firezone/firezone/main/scripts/gateway-systemd-install.sh)
 
