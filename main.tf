@@ -62,9 +62,6 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
       #!/bin/bash
       set -euo pipefail
 
-      sudo apt-get update
-      sudo apt-get install -y curl
-
       # Export environment variables for the installation script
       export FIREZONE_TOKEN="${var.firezone_token}"
       export FIREZONE_VERSION="${var.firezone_version}"
