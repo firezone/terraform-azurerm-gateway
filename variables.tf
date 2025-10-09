@@ -77,8 +77,8 @@ variable "private_subnet" {
   type        = string
 }
 
-variable "private_subnet_ipv6" {
-  description = "The private IPv6 subnet ID"
+variable "public_ipv6_prefix" {
+  description = "The public IPv6 prefix to use"
   type        = string
   default     = null
 }
