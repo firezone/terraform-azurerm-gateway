@@ -51,6 +51,11 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     }
   }
 
+  os_disk {
+    caching              = "None"
+    storage_account_type = "Premium_LRS"
+  }
+
   extension {
     name                 = "firezone-gateway-install"
     publisher            = "Microsoft.Azure.Extensions"
