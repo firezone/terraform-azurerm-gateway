@@ -23,9 +23,20 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     network_security_group_id = var.network_security_group_id
 
     ip_configuration {
-      name      = "internal"
+      name      = "internal-ipv4"
       primary   = true
       subnet_id = var.private_subnet
+      version   = "IPv4"
+    }
+
+    dynamic "ip_configuration" {
+      for_each = var.private_subnet_ipv6 != null ? [1] : []
+      content {
+        name      = "internal-ipv6"
+        primary   = false
+        subnet_id = var.private_subnet_ipv6
+        version   = "IPv6"
+      }
     }
   }
 
