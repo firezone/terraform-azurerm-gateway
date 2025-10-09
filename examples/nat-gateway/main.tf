@@ -1,12 +1,12 @@
 # Change these to match your environment
 locals {
   location       = "East US"
-  admin_ssh_key  = file("~/.ssh/id_rsa.azure.pub")
+  admin_ssh_key  = file("./dummy.pub")
   firezone_token = "YOUR_FIREZONE_TOKEN"
 }
 
 module "gateway" {
-  source = "firezone/gateway/azurerm"
+  source = "../../" # Replace with `firezone/gateway/azurerm`
 
   ###################
   # Required inputs #
