@@ -49,23 +49,34 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
         public_key = var.admin_ssh_key
       }
     }
+  }
 
-    custom_data = base64encode(<<-EOF
-    #!/bin/bash
-    set -e
+  extension {
+    name                 = "firezone-gateway-install"
+    publisher            = "Microsoft.Azure.Extensions"
+    type                 = "CustomScript"
+    type_handler_version = "2.1"
 
-    sudo apt-get update
-    sudo apt-get install -y curl
+    settings = jsonencode({
+      script = base64encode(<<-SCRIPT
+      #!/bin/bash
+      set -euo pipefail
 
-    FIREZONE_TOKEN="${var.firezone_token}" \
-    FIREZONE_VERSION="${var.firezone_version}" \
-    FIREZONE_NAME="${var.firezone_name}" \
-    FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)" \
-    FIREZONE_API_URL="${var.firezone_api_url}" \
-    bash <(curl -fsSL https://raw.githubusercontent.com/firezone/firezone/main/scripts/gateway-systemd-install.sh)
+      # Export environment variables for the installation script
+      export FIREZONE_TOKEN="${var.firezone_token}"
+      export FIREZONE_VERSION="${var.firezone_version}"
+      export FIREZONE_NAME="${var.firezone_name}"
+      export FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)"
+      export FIREZONE_API_URL="${var.firezone_api_url}"
 
-    EOF
-    )
+      # Download and execute the Firezone installation script
+      # The extension handler will retry this automatically if it fails
+      curl -fsSL https://raw.githubusercontent.com/firezone/firezone/main/scripts/gateway-systemd-install.sh | bash
+
+      echo "Firezone Gateway installation completed successfully"
+      SCRIPT
+      )
+    })
   }
 
   tags = var.extra_tags
