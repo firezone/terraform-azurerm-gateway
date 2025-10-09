@@ -1,5 +1,5 @@
 resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
-  name                        = "firezone-gateway-vmss-${var.resource_group_location}"
+  name                        = "firezone-gateway-vmss-${replace(var.resource_group_location, " ", "")}"
   location                    = var.resource_group_location
   resource_group_name         = var.resource_group_name
   sku_name                    = var.instance_type
