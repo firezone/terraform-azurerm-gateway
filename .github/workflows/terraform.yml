@@ -13,7 +13,6 @@ jobs:
       run:
         working-directory: ${{ matrix.path }}
     strategy:
-      fail-fast: true
       matrix:
         path: [".", "examples/nat-gateway"]
     steps:
