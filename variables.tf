@@ -73,8 +73,14 @@ variable "firezone_api_url" {
 }
 
 variable "private_subnet" {
-  description = "The private subnet ID"
+  description = "The private IPv4 subnet ID"
   type        = string
+}
+
+variable "private_subnet_ipv6" {
+  description = "The private IPv6 subnet ID"
+  type        = string
+  default     = null
 }
 
 variable "network_security_group_id" {
