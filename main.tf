@@ -32,9 +32,10 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     dynamic "ip_configuration" {
       for_each = var.public_ipv6_prefix != null ? [1] : []
       content {
-        name    = "internal-ipv6"
-        primary = false
-        version = "IPv6"
+        name      = "internal-ipv6"
+        primary   = false
+        subnet_id = var.private_subnet
+        version   = "IPv6"
         public_ip_address {
           name                = "public-ipv6"
           version             = "IPv6"
