@@ -40,7 +40,7 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
           name                = "public-ipv6"
           version             = "IPv6"
           public_ip_prefix_id = var.public_ipv6_prefix
-          sku_name            = "Standard_Global"
+          sku_name            = "Standard_Regional"
         }
       }
     }
