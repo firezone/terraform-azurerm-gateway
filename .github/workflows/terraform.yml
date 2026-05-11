@@ -1,25 +1,25 @@
-name: Terraform
+name: Terraform Lint & Validate
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
 
 jobs:
-  validate:
+  terraform:
+    name: Format & Validate
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ matrix.path }}
-    strategy:
-      matrix:
-        path: [".", "examples/nat-gateway"]
+
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
 
-      - run: terraform fmt -check -recursive
-      - run: terraform init -backend=false
-      - run: terraform validate
+      - name: terraform fmt (check)
+        run: terraform fmt -check -diff -recursive
+
+      - name: terraform init
+        run: terraform init -backend=false
+
+      - name: terraform validate
+        run: terraform validate
