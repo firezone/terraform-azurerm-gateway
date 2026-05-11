@@ -80,6 +80,9 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
       export FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)"
       export FIREZONE_API_URL="${var.firezone_api_url}"
       export FIREZONE_LOG_FORMAT="${var.log_format}"
+      %{if var.observability_enable_flow_logs}
+      export FIREZONE_FLOW_LOGS="true"
+      %{endif}
       export RUST_LOG="${var.log_level}"
 
       # Download and execute the Firezone installation script

@@ -100,6 +100,10 @@ variable "platform_fault_domain_count" {
   default     = 3
 }
 
+################################################################################
+## Observability
+################################################################################
+
 variable "log_level" {
   description = "Sets RUST_LOG environment variable which applications should use to configure Rust Logger. Default: 'info'."
   nullable    = false
@@ -117,4 +121,12 @@ variable "log_format" {
     condition     = contains(["human", "json"], var.log_format)
     error_message = "log_format must be either 'human' or 'json'."
   }
+}
+
+variable "observability_enable_flow_logs" {
+  type     = bool
+  nullable = false
+  default  = false
+
+  description = "Sets FIREZONE_FLOW_LOGS=true for the Gateway when enabled. Default: false."
 }
