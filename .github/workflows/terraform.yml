@@ -3,6 +3,9 @@ name: Terraform Lint & Validate
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   terraform:
     name: Format & Validate
