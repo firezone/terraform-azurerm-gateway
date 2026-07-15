@@ -1,9 +1,27 @@
+locals {
+  # In single-owner mode one scale set is deployed per token, each with a
+  # single instance; in legacy multi-owner mode a single scale set runs
+  # var.desired_capacity (default 3) instances sharing one token.
+  tokens = var.firezone_tokens != null ? var.firezone_tokens : [var.firezone_token]
+}
+
+moved {
+  from = azurerm_orchestrated_virtual_machine_scale_set.firezone
+  to   = azurerm_orchestrated_virtual_machine_scale_set.firezone[0]
+}
+
 resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
-  name                        = "firezone-gateway-vmss-${replace(var.resource_group_location, " ", "")}"
+  count = length(local.tokens)
+
+  name = var.firezone_tokens != null ? (
+    "firezone-gateway-vmss-${count.index}-${replace(var.resource_group_location, " ", "")}"
+    ) : (
+    "firezone-gateway-vmss-${replace(var.resource_group_location, " ", "")}"
+  )
   location                    = var.resource_group_location
   resource_group_name         = var.resource_group_name
   sku_name                    = var.instance_type
-  instances                   = var.desired_capacity
+  instances                   = var.firezone_tokens != null ? 1 : coalesce(var.desired_capacity, 3)
   platform_fault_domain_count = var.platform_fault_domain_count
 
   source_image_reference {
@@ -74,7 +92,7 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
       set -euo pipefail
 
       # Export environment variables for the installation script
-      export FIREZONE_TOKEN="${var.firezone_token}"
+      export FIREZONE_TOKEN="${local.tokens[count.index]}"
       export FIREZONE_VERSION="${var.firezone_version}"
       export FIREZONE_NAME="${var.firezone_name}"
       export FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)"
@@ -96,4 +114,16 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
   }
 
   tags = var.extra_tags
+
+  lifecycle {
+    precondition {
+      condition     = (var.firezone_token != null) != (var.firezone_tokens != null)
+      error_message = "Exactly one of firezone_token (multi-owner, legacy) or firezone_tokens (single-owner, one per instance) must be set."
+    }
+
+    precondition {
+      condition     = var.firezone_tokens == null || var.desired_capacity == null
+      error_message = "desired_capacity cannot be set when firezone_tokens is used; the number of instances is determined by the length of the token list."
+    }
+  }
 }
