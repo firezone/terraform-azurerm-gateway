@@ -1,8 +1,12 @@
 # Change these to match your environment
 locals {
-  location       = "East US"
-  admin_ssh_key  = file("./dummy.pub")
-  firezone_token = "YOUR_FIREZONE_TOKEN"
+  location      = "East US"
+  admin_ssh_key = file("./dummy.pub")
+
+  # Generate one single-owner token per Gateway instance from the admin portal
+  # in Sites -> <site> -> Deploy Gateway. One Gateway instance is deployed per
+  # token. We recommend a minimum of 3 instances for high availability.
+  firezone_tokens = ["<TOKEN 1>", "<TOKEN 2>", "<TOKEN 3>"]
 }
 
 module "gateway" {
@@ -16,9 +20,15 @@ module "gateway" {
   resource_group_location = azurerm_resource_group.firezone.location
   resource_group_name     = azurerm_resource_group.firezone.name
 
-  # Generate a token from the admin portal in Sites -> <site> -> Deploy Gateway.
-  # Only one token is needed for the cluster.
-  firezone_token = local.firezone_token
+  # Single-owner tokens, one per Gateway instance (bound to one connected
+  # Gateway at a time). One Gateway instance is deployed per token.
+  firezone_tokens = local.firezone_tokens
+
+  # Legacy: multi-owner tokens share one token across the cluster. Only use
+  # this for existing deployments; set it instead of firezone_tokens and set
+  # desired_capacity to the desired number of instances.
+  # firezone_token   = "<YOUR TOKEN HERE>"
+  # desired_capacity = 3
 
   # Attach the Gateways to your subnet.
   private_subnet = azurerm_subnet.private.id
@@ -32,9 +42,6 @@ module "gateway" {
   ###################
   # Optional inputs #
   ###################
-
-  # We recommend a minimum of 3 instances for high availability.
-  # desired_capacity    = 3
 
   # The admin username for the admin_ssh_key above. Defaults to "firezone".
   # admin_username = "firezone"

@@ -32,9 +32,9 @@ variable "instance_type" {
 }
 
 variable "desired_capacity" {
-  description = "The desired number of instances"
+  description = "The number of Gateway instances to deploy when using firezone_token (legacy). Defaults to 3. Must not be set when using firezone_tokens, where the number of instances is the length of the token list."
   type        = number
-  default     = 3
+  default     = null
 }
 
 variable "admin_username" {
@@ -49,8 +49,16 @@ variable "admin_ssh_key" {
 }
 
 variable "firezone_token" {
-  description = "The Firezone token"
+  description = "A multi-owner Firezone token shared by all Gateway instances (legacy). New deployments should use firezone_tokens instead. Mutually exclusive with firezone_tokens."
   type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "firezone_tokens" {
+  description = "A list of single-owner Firezone tokens, one per Gateway instance. Each token can only be used by one connected Gateway at a time. The number of Gateway instances deployed is the length of this list. Mutually exclusive with firezone_token."
+  type        = list(string)
+  default     = null
   sensitive   = true
 }
 
