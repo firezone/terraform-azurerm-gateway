@@ -36,7 +36,7 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
     primary = true
 
     # Required to egress traffic
-    enable_ip_forwarding = true
+    ip_forwarding_enabled = true
 
     network_security_group_id = var.network_security_group_id
 
