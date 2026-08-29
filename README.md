@@ -117,7 +117,6 @@ may replace all instances in parallel. Pinning `firezone_version` (rather than
 | `source_image_reference` | The source image reference for the instances. This module assumes a Debian-based image. | `object` | Ubuntu 22.04 LTS | no |
 | `instance_type` | The instance type. Gateways are lightweight; see [sizing recommendations](https://www.firezone.dev/kb/deploy/gateways#sizing-recommendations). | `string` | `"Standard_B1ls"` | no |
 | `firezone_version` | The Gateway version to deploy. | `string` | `"latest"` | no |
-| `firezone_name` | Name for the Gateways, appears in the admin portal. | `string` | `"$(hostname)"` | no |
 | `firezone_api_url` | The Firezone API URL. | `string` | `"wss://api.firezone.dev"` | no |
 | `public_ipv6_prefix` | The public IPv6 prefix to use. | `string` | `null` | no |
 | `platform_fault_domain_count` | The number of fault domains. | `number` | `3` | no |

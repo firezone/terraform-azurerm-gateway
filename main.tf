@@ -94,7 +94,6 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "firezone" {
       # Export environment variables for the installation script
       export FIREZONE_TOKEN="${local.tokens[count.index]}"
       export FIREZONE_VERSION="${var.firezone_version}"
-      export FIREZONE_NAME="${var.firezone_name}"
       export FIREZONE_ID="$(head -c 32 /dev/urandom | sha256sum | cut -d' ' -f1)"
       export FIREZONE_API_URL="${var.firezone_api_url}"
       export FIREZONE_LOG_FORMAT="${var.log_format}"
