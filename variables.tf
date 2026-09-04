@@ -68,12 +68,6 @@ variable "firezone_version" {
   default     = "latest"
 }
 
-variable "firezone_name" {
-  description = "Name for the Gateways used in the admin portal"
-  type        = string
-  default     = "$(hostname)"
-}
-
 variable "firezone_api_url" {
   description = "The Firezone API URL"
   type        = string
